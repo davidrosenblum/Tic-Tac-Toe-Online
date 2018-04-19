@@ -15,14 +15,13 @@ let Settings = class Settings{
     constructor(json){
         json = (!json) ? {} : json;
         
-        for(let opt in DEFAULT_SETTINGS){
-            if(typeof json[opt] === typeof DEFAULT_SETTINGS[opt]){
-                this[opt] = json[opt];
-            }
-            else{
-                this[opt] = DEFAULT_SETTINGS[opt];
-            }
-        }
+        this.http = {
+            port: (!json.http || typeof json.http.port !== "number") ? DEFAULT_SETTINGS.http.port : json.http.port
+        };
+
+        this.ws = {
+            port: (!json.ws || typeof json.ws.port !== "number") ? DEFAULT_SETTINGS.ws.port : json.ws.port
+        };
     }
 
     static read(callback){
@@ -31,7 +30,12 @@ let Settings = class Settings{
                 callback(err, new Settings());
             }
             else{
-                callback(null, new Settings(data));
+                try{
+                    callback(null, new Settings(JSON.parse(data)));
+                }
+                catch(err){
+                    callback(err, new Settings());
+                }
             }
         });
     }
