@@ -62,6 +62,10 @@ body{
     font-family: consolas;
 }
 
+#reset-game-btn{
+    display: none;
+}
+
 #modal-container{
     display: none;
     width: 250px;

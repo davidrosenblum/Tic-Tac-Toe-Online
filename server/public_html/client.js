@@ -16,8 +16,9 @@
     var connectContainer = null,            // displayed when connecting to server
         pinContainer = null,                // displayed when connected (awaits offline or online)
         teamSelectContainer = null,         // displayed when offline mode starts, pick 'X' or 'O'
-        canvasContainer = null,             // displays the game (canvas!)
+        gameContainer = null,               // displays the game (canvas!)
         disconnectContainer = null,         // displays the disconnection error message
+        resetGameBtn = null,                // reset button
         modalContainer = null,              // holds the popup modal
         modalBody = null;                   // modal text body t
         modalCloseBtn = null;               // the modal 'close' button
@@ -68,10 +69,12 @@
     var initGame = function(givenMark){
         showGame();
 
+        resetGameBtn.style.display = "none";
+
         mark = givenMark;
         multiplayerMode = true;
 
-        canvasContainer.appendChild(canvas);
+        document.querySelector("#canvas-container").appendChild(canvas);
         resetGameMatrix();
         render();
     };
@@ -180,7 +183,7 @@
         var value = checkVictoryConditions();
         if(value !== null){
             modal(value);
-            // resetGameBtnSHow()
+            resetGameBtn.style.display = "inline";
             return;
         }
 
@@ -197,6 +200,13 @@
 
                 break;
             }
+        }
+
+        value = checkVictoryConditions()
+        if(value !== null){
+            modal(value);
+            resetGameBtn.style.display = "inline";
+            return;
         }
 
         myTurn = true;
@@ -267,7 +277,7 @@
         connectContainer.style.display = "block";
         pinContainer.style.display = "none";
         teamSelectContainer.style.display = "none";
-        canvasContainer.style.display = "none";
+        gameContainer.style.display = "none";
         disconnectContainer.style.display = "none";
     };
 
@@ -276,7 +286,7 @@
         connectContainer.style.display = "none";
         pinContainer.style.display = "block";
         teamSelectContainer.style.display = "none";
-        canvasContainer.style.display = "none";
+        gameContainer.style.display = "none";
         disconnectContainer.style.display = "none";
 
         pin = pinFromServer;
@@ -288,7 +298,7 @@
         connectContainer.style.display = "none";
         pinContainer.style.display = "none";
         teamSelectContainer.style.display = "block";
-        canvasContainer.style.display = "none";
+        gameContainer.style.display = "none";
         disconnectContainer.style.display = "none";
     };
 
@@ -297,7 +307,7 @@
         connectContainer.style.display = "none";
         pinContainer.style.display = "none";
         teamSelectContainer.style.display = "none";
-        canvasContainer.style.display = "none";
+        gameContainer.style.display = "none";
         disconnectContainer.style.display = "block";
     };
 
@@ -306,7 +316,7 @@
         connectContainer.style.display = "none";
         pinContainer.style.display = "none";
         teamSelectContainer.style.display = "none";
-        canvasContainer.style.display = "block";
+        gameContainer.style.display = "block";
         disconnectContainer.style.display = "none";
     };
 
@@ -444,7 +454,7 @@
         connectContainer = document.querySelector("#connecting-container");
         pinContainer = document.querySelector("#pin-container");
         teamSelectContainer = document.querySelector("#team-select-container");
-        canvasContainer = document.querySelector("#canvas-container");
+        gameContainer = document.querySelector("#game-container");
         disconnectContainer = document.querySelector("#disconnect-container");
 
         // cache modal elements
@@ -456,6 +466,7 @@
         modalBlack = document.querySelector("#modal-black");
 
         // cache misc elements
+        resetGameBtn = document.querySelector("#reset-game-btn");
         gameText = document.querySelector("#game-text");
 
         // button listeners
@@ -472,6 +483,9 @@
         modalAcceptBtn.onclick = function(){
             hideModal();
             send("challenge-response", {response: true});
+        };
+        resetGameBtn.onclick = function(){
+            initGameOffline(mark);
         };
 
         // canvas setup
