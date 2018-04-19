@@ -22,15 +22,85 @@ let GameRoom = class GameRoom{
             [0, 0, 0],
             [0, 0, 0]
         ];
+
+        this.gameSpacesLeft = 9;
     }
 
     checkVictoryConditions(){
-        
+        let result = this.checkRows();
+        if(result < 1){
+            result = this.checkCols();
+        }
+        if(result < 1){
+            result = this.checkDiags();
+        }
+
+        if(result >= 1){
+            return (result === 1) ? `${this.player1.id} wins!` : `${this.player2.id} wins!`;
+        }
+
+        console.log(result);
+
+        if(this.gameSpacesLeft === 0){
+            return "It's a tie!";
+        }
+
+        return null;
+    }
+
+    checkRows(){
+        let result = -1, y = 0;
+        while(result < 1 && y < 3){
+            result = this.checkRow(y);
+            y++;
+        }
+        return result;
+    }
+
+    checkRow(y){
+        if(this.gameMatrix[y][0] === this.gameMatrix[y][1] && this.gameMatrix[y][1] === this.gameMatrix[y][2]){
+            if(this.gameMatrix[y][0] > 0){
+                return this.gameMatrix[y][0];
+            }
+        }
+        return -1;
+    }
+
+    checkCols(){
+        let result = -1, x = 0;
+        while(result < 1 && x < 3){
+            result = this.checkCol(x);
+            x++;
+        }
+        return result;
+    }
+
+    checkCol(x){   
+        if(this.gameMatrix[0][x] === this.gameMatrix[1][x] && this.gameMatrix[1][x] === this.gameMatrix[2][x]){
+            if(this.gameMatrix[0][x] > 0){
+                return this.gameMatrix[0][x];
+            }
+        }
+        return -1;
+    }
+
+    checkDiags(){
+        if(this.gameMatrix[0][0] === this.gameMatrix[1][1] && this.gameMatrix[1][1] === this.gameMatrix[2][2]){
+            if(this.gameMatrix[0][0] !== 0){
+                return this.gameMatrix[0][0];
+            }
+        }
+        else if(this.gameMatrix[2][0] === this.gameMatrix[1][1] && this.gameMatrix[1][1] === this.gameMatrix[0][2]){
+            if(this.gameMatrix[2][0] !== 0){
+                return this.gameMatrix[2][0];
+            }
+        }
+        return -1;
     }
 
     end(message){
-        this.send(this.player1, this.opCodes.GAME_OVER, message);
-        this.send(this.player2, this.opCodes.GAME_OVER, message);   
+        this.send(this.player1, this.opCodes.GAME_OVER, (message.indexOf(this.player1.id) > -1 ? "You win!" : message));
+        this.send(this.player2, this.opCodes.GAME_OVER, (message.indexOf(this.player2.id) > -1 ? "You win!" : message));   
         
         this.unroom();
     }
@@ -54,11 +124,21 @@ let GameRoom = class GameRoom{
             mark: (conn === this.player1) ? P1 : P2
         };
 
+        this.gameSpacesLeft--;
+        this.gameMatrix[data.y][data.x] = (conn === this.player1) ? 1 : 2;
+
         this.send(this.player1, this.opCodes.GAME_UPDATE, update);
         this.send(this.player2, this.opCodes.GAME_UPDATE, update);
 
         this.currTurn = (this.currTurn === 1) ? 2 : 1;
-        this.takeTurn();
+
+        let result = this.checkVictoryConditions();
+        if(!result){
+            this.takeTurn();
+        }
+        else{
+            this.end(result);
+        }
     }
 
     takeTurn(){

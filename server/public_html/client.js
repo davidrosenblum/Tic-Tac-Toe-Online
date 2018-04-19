@@ -77,6 +77,8 @@
         document.querySelector("#canvas-container").appendChild(canvas);
         resetGameMatrix();
         render();
+
+        hideModal();
     };
 
     // initializes the game into single player mode
@@ -220,10 +222,6 @@
         while(y < 3 && !result){
             result = checkRow(y);
             y++;
-        }
-
-        if(result){
-            return (result === mark) ? "You win!" : "You lose!";
         }
 
         while(x < 3 && !result){

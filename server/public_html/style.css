@@ -66,6 +66,10 @@ body{
     display: none;
 }
 
+#game-text{
+    padding: 10px;
+}
+
 #modal-container{
     display: none;
     width: 250px;
