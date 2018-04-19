@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tic-Tac-Toe</title>
+    <link href="bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id="wrapper">
+        <div id="connecting-container" class="game-container">
+            Connecting to server...
+        </div>
+        <div id="pin-container" class="game-container">
+            <div class="text-center">
+                PIN:    
+                <span id="my-pin">{pin}</span>
+            </div>
+            <br>
+            <div>
+                <input id="target-pin" type="text" placeholder="Enter opponent PIN">
+            </div>
+            <br>
+            <div>
+                <button id="challenge-btn" class="action-btn">Challenge</button>
+                <button id="offline-btn" class="action-btn">Offline</button>
+            </div>
+        </div>
+        <div id="waiting-on-server-container" class="game-container">
+
+        </div>
+        <div id="team-select-container" class="game-container">
+            <h3>Select your team</h3>
+            <button id="select-team-x" class="select-btn">Select X</button>
+            <button id="select-team-o" class="select-btn">Select O</button>
+        </div>
+        <div id="disconnect-container" class="game-container">
+            <p>Your connection has been lost.</p>
+            <p>Please refresh the browser.</p>
+            <p><button id="offline-btn-fallback" class="action-btn">Offline</button></p>
+        </div>
+        <div id="canvas-container" class="game-container">
+            <div>
+                <span id="game-text"></span>
+            </div>
+            <!-- canvas gets injected here! -->
+        </div>
+    </div>
+    <div id="modal-black"></div>
+    <div id="modal-container">
+        <div id="modal-body">
+        </div>
+        <div id="modal-footer">
+            <button id="modal-accept-btn" class="modal-btn">Accept</button>
+            <button id="modal-decline-btn" class="modal-btn">Decline</button>
+            <button id="modal-close-btn" class="modal-btn">Close</button>
+        </div>
+    </div>
+    <script src="client.js"></script>
+</body>
+</html>
