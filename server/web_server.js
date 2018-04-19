@@ -19,6 +19,12 @@ server.route("/wsport").get((req, res) => {
     res.end(settings.ws.port + "");
 });
 
+// send websocket port 
+server.route("/wsport").get((req, res) => {
+    res.writeHead(200);
+    res.end(settings.http.port + "");
+});
+
 // loads settings and starts the server
 let init = function(){
     console.log("Loading settings...");

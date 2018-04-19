@@ -12,6 +12,9 @@
     var pin = -1,                            // PIN number (unique way to ID this client)
         socket = null;                       // websocket 
 
+    // options data
+    var queryStrings = {};                  // query strings used for custom settings
+
     // element cache fields
     var connectContainer = null,            // displayed when connecting to server
         pinContainer = null,                // displayed when connected (awaits offline or online)
@@ -63,7 +66,29 @@
             return false;
         }
         throw new Error("Not a hitbox!");
-    }
+    };
+
+    // ajax request
+    var ajax = function(url, options, callback){
+        options = (!options) ? {} : options;
+
+        var method = (typeof options.method === "string") ? options.method : "GET",
+            headers = (typeof options.headers === "object" && options.headers) ? options.headers : {};
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onload = function(){
+            if(typeof callback === "function"){
+                callback(xhr);
+            }
+        };
+
+        xhr.open(method, url, true);
+        for(var h in headers){
+            xhr.setRequestHeader(h, headers[h]);
+        }
+        xhr.send(options.data);
+    };
 
     // initializes the game into multiplayer mode
     var initGame = function(givenMark){
@@ -325,7 +350,9 @@
 
     // processes data received from the server
     var handleSocketData = function(evt){
-        console.log(evt.data);
+        if(queryStrings["log_packets"] === "true"){
+            console.log(evt.data)
+        }
 
         var opCode, data;
         try{
@@ -393,18 +420,31 @@
     
     // instantiates and connects the websocket applying required listener functions 
     var connect = function(){
-        socket = new WebSocket("ws://localhost:6615");
+        ajax(window.location.protocol + "//" + window.location.host + "/wsport", null, function(xhr){
+            if(xhr.status !== 200){
+                throw new Error("AJAX request failed to reach server.");
+            }
 
-        socket.onopen = function(){
-            console.log("Connected!");
-        };
-        
-        socket.onclose = function(err){
-            console.log(err);
-            showDisconnect();
-        };
+            var protocol = (window.location.protocol === "http:") ? "ws:" : "wss:";
 
-        socket.onmessage = handleSocketData;
+            socket = new WebSocket(protocol + window.location.hostname + ":" + xhr.response);
+
+            socket.onopen = function(){
+                console.log("Connected!");
+            };
+
+            socket.onerror = function(err){
+                //console.log(err);
+                showDisconnect();
+            }
+            
+            socket.onclose = function(err){
+                //console.log(err);
+                showDisconnect();
+            };
+
+            socket.onmessage = handleSocketData;
+        });
     };
 
     // safely sends a message to the server
@@ -446,8 +486,35 @@
         modalBlack.style.display = "none";
     };
 
+    // parses query string data
+    var parseQueryStrings = function(){
+        var qs = {};
+
+        var split = window.location.href.split("?");
+        if(split.length < 2){
+            return {};
+        }
+
+        split = split[1].split("&");
+
+        for(var i = 0; i < split.length; i++){
+            var pair = split[i];
+            var pairSplit = pair.split("=");
+
+            var param = pairSplit[0];
+            var val = (pairSplit.length > 1) ? pairSplit[1] : null;
+
+            qs[param] = val;
+        }
+
+        return qs;
+    };
+
     // initialization called when the document loads
     var init = function(){
+        // query strings
+        queryStrings = parseQueryStrings();
+
         // cache container elements
         connectContainer = document.querySelector("#connecting-container");
         pinContainer = document.querySelector("#pin-container");
