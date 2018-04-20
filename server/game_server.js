@@ -4,6 +4,7 @@ let wss = require("nodejs-websocket"),
 
 const OP_CODE = {
     PIN: "pin",
+    GET_PINS: "get-pins",
     CHALLENGE: "challenge",
     CHALLENGE_INV: "challenge-inv",
     CHALLENGE_ERR: "challenge-err",
@@ -71,6 +72,20 @@ let handleSocketData = function(conn, message){
     else if(opCode === OP_CODE.GAME_SUBMIT_TURN){
         conn.room.update(conn, data);
     }
+    else if(opCode === OP_CODE.GET_PINS){
+        send(conn, OP_CODE.GET_PINS, {pins: getPINs(conn.id)});
+    }
+};
+
+let getPINs = function(ignorePin){
+    var pinsFound = [];
+    for(let pin in pins){
+        if(pin === ignorePin){
+            continue;
+        }
+        pinsFound.push(pin);
+    }
+    return pinsFound;
 };
 
 let challenge = function(client, targetPin){

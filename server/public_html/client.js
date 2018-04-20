@@ -371,6 +371,9 @@
         if(opCode === "pin"){
             showPin(data.pin);
         }
+        else if(opCode === "get-pins"){
+            modalPinList(data.pins);
+        }
         else if(opCode === "challenge-inv"){
             modalInvite(data.message);
         }
@@ -416,6 +419,11 @@
         else{
             send("challenge", {targetPin: targetPin});
         }
+    };
+
+    // request online players
+    var requestPINs = function(){
+        send("get-pins");
     };
     
     // instantiates and connects the websocket applying required listener functions 
@@ -478,7 +486,26 @@
         modalDeclineBtn.style.display = "inline";
         modalAcceptBtn.style.display = "inline";
         modalCloseBtn.style.display = "none";
-    }
+    };
+
+    var modalPinList = function(pins){
+        if(!pins || pins.length === 0){
+            modal("You are the only online player.");
+        }
+        else{
+            var html = "<br>"
+            for(var i = 0; i < pins.length; i++){
+                html += "<br>" + pins[i];
+            }
+
+            if(pins.length === 1){
+                modal("There is 1 other player." + html);
+            }
+            else{
+                modal("There are " + pins.length + " other players." + html);
+            }
+        }
+    };
 
     // hides the modal
     var hideModal = function(){
@@ -523,7 +550,7 @@
         disconnectContainer = document.querySelector("#disconnect-container");
 
         // cache modal elements
-        modalContainer = document.querySelector("#modal-container");
+        modalContainer = document.querySelector("#modal-wrapper");
         modalBody = document.querySelector("#modal-body");
         modalCloseBtn = document.querySelector("#modal-close-btn");
         modalDeclineBtn = document.querySelector("#modal-decline-btn");
@@ -536,6 +563,7 @@
 
         // button listeners
         modalCloseBtn.onclick = hideModal;
+        document.querySelector("#find-pins-btn").onclick = requestPINs
         document.querySelector("#challenge-btn").onclick = requestChallenge;
         document.querySelector("#offline-btn").onclick = showTeamSelect;
         document.querySelector("#select-team-x").onclick = () => initGameOffline("x");
