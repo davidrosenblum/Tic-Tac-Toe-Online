@@ -2,6 +2,9 @@
 let express = require("express"),
     Settings = require("./js/Settings.js");
 
+// keep track of version
+const VERSION = "1.0.0";
+
 // create http server
 let server = express().use(express.static(`${__dirname}/public_html`));
 
@@ -54,5 +57,5 @@ let init = function(){
 };
 
 console.log("Tic-Tac-Toe Web Server");
-console.log("(David Rosenblum)\n")
+console.log(`v${VERSION} (David Rosenblum)\n`);
 init();
