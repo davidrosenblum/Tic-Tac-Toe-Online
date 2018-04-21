@@ -1,0 +1,109 @@
+body{
+    background-color: #202020;
+    font-family: arial;
+}
+
+.game-container{
+    display: none;
+    max-width: 550px;
+    margin: auto;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    text-align: center;
+    background-color: white;
+    margin-top: 15px;
+}
+
+.action-btn, .select-btn{
+    padding: 5px;
+    background-color: transparent;
+    border: 1px solid darkred;
+    border-radius: 4px;
+    color: darkred;
+    width: 115px;
+    transition: 0.5s;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 1em;
+}
+
+.action-btn:hover, .select-btn:hover{
+    color: white;
+    background-color: darkred;
+    border-color: darkred;
+}
+
+.modal-btn{
+    border: 1px solid black;
+    border-radius: 4px;
+    background-color: transparent;
+    transition: 0.5s;
+    font-size: 1em;
+    width: 75px;
+}
+
+.modal-btn:hover{
+    background-color: black;
+    color: white;
+}
+
+#target-pin{
+    border: 1px solid darkred;
+    color: darkred;
+    border-radius: 2px;
+    text-align: center;
+    width: 250px;
+    height: 30px;
+    font-size: 1em;
+}
+
+#my-pin{
+    font-weight: bold;
+    font-family: consolas;
+}
+
+#game-text{
+    padding: 10px;
+}
+
+#modal-wrapper{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#modal-container{
+    background-color: white;
+    min-width: 100px;
+    max-width: 350px;
+    margin: auto;
+    margin-top: 50px;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 5px 10px 2px 10px;
+}
+
+#modal-body{
+    min-height: 30px;    
+}
+
+#modal-black{
+    display: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.8;
+}
+
+::selection{
+    background-color: black;
+    color: white;
+}
