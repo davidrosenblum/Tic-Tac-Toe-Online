@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <title>Tic-Tac-Toe</title>
-    <link href="bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <div id="wrapper">
@@ -31,8 +31,18 @@
         </div>
         <div id="team-select-container" class="game-container">
             <h3>Select your team</h3>
-            <button id="select-team-x" class="select-btn">Select X</button>
-            <button id="select-team-o" class="select-btn">Select O</button>
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="img/mark_x.png" alt="Team X" width="50px">
+                    <br>
+                    <button id="select-team-x" class="select-btn">Select X</button>
+                </div>
+                <div class="col-md-6">
+                    <img src="img/mark_o.png" alt="Team O" width="50px">
+                    <br>
+                    <button id="select-team-o" class="select-btn">Select O</button>
+                </div>
+            </div>
         </div>
         <div id="disconnect-container" class="game-container">
             <p>Your connection has been lost.</p>
@@ -46,8 +56,9 @@
             <div id="canvas-container">
                 <!-- canvas gets injected here! -->
             </div>
-            <div class="text-center">
+            <div id="game-btns-container" class="text-center">
                 <button id="reset-game-btn" class="select-btn">Reset</button>
+                <button id="menu-btn" class="select-btn">Menu</button>
             </div>
         </div>
     </div>
@@ -64,6 +75,6 @@
             </div>
         </div>
     </div>
-    <script src="client.js"></script>
+    <script src="js/client.js"></script>
 </body>
 </html>

@@ -2,6 +2,8 @@ let wss = require("nodejs-websocket"),
     GameRoom = require("./js/GameRoom.js"),
     Settings = require("./js/Settings.js");
 
+const VERSION = "1.0.0";
+
 const OP_CODE = {
     PIN: "pin",
     GET_PINS: "get-pins",
@@ -176,5 +178,5 @@ let init = function(){
 };
 
 console.log(`Tic-Tac-Toe WebSocket Game Server`);
-console.log("(David Rosenblum)\n");
+console.log(`v${VERSION} (David Rosenblum)\n`);
 init();
