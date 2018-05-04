@@ -101,6 +101,12 @@ let GameRoom = class GameRoom{
     end(message){
         this.send(this.player1, this.opCodes.GAME_OVER, (message.indexOf(this.player1.id) > -1 ? "You win!" : message));
         this.send(this.player2, this.opCodes.GAME_OVER, (message.indexOf(this.player2.id) > -1 ? "You win!" : message));   
+
+        this.player1.challengedBy = null;
+        this.player1.challenges = null;
+
+        this.player2.challengedBy = null;
+        this.player2.challenges = null;
         
         this.unroom();
     }

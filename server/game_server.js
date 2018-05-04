@@ -90,7 +90,7 @@ let getPINs = function(ignorePin){
     return pinsFound;
 };
 
-let challenge = function(client, targetPin){
+let challenge = function(client, targetPin){  
     if(client.id === targetPin){
         send(client, OP_CODE.CHALLENGE_ERR, {message: "You cannot challenge yourself."});
         return;
