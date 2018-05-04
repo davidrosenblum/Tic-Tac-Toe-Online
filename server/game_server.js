@@ -38,7 +38,7 @@ let server = wss.createServer(conn => {
         delete pins[conn.id];
     
         if(conn.room){
-            conn.challengedBy.challenges = null;
+            //conn.challengedBy.challenges = null;
             conn.room.stopError(`${conn.id} disconnected.`);
         }
 
